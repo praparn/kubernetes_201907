@@ -63,7 +63,7 @@ spec:
         - containerPort: 6379
           protocol: TCP
       - name: webservice
-        image: labdocker/cluster:webservice
+        image: labdocker/cluster:webservicev2
         env:
         - name: REDIS_HOST
           valueFrom:
