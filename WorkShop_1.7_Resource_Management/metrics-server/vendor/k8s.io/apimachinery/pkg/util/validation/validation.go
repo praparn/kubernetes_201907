@@ -21,7 +21,10 @@ import (
 	"math"
 	"net"
 	"regexp"
+	"strconv"
 	"strings"
+
+	"k8s.io/apimachinery/pkg/util/validation/field"
 )
 
 const qnameCharFmt string = "[A-Za-z0-9]"
@@ -67,8 +70,25 @@ func IsQualifiedName(value string) []string {
 	return errs
 }
 
+// IsFullyQualifiedName checks if the name is fully qualified.
+func IsFullyQualifiedName(fldPath *field.Path, name string) field.ErrorList {
+	var allErrors field.ErrorList
+	if len(name) == 0 {
+		return append(allErrors, field.Required(fldPath, ""))
+	}
+	if errs := IsDNS1123Subdomain(name); len(errs) > 0 {
+		return append(allErrors, field.Invalid(fldPath, name, strings.Join(errs, ",")))
+	}
+	if len(strings.Split(name, ".")) < 3 {
+		return append(allErrors, field.Invalid(fldPath, name, "should be a domain with at least three segments separated by dots"))
+	}
+	return allErrors
+}
+
 const labelValueFmt string = "(" + qualifiedNameFmt + ")?"
 const labelValueErrMsg string = "a valid label must be an empty string or consist of alphanumeric characters, '-', '_' or '.', and must start and end with an alphanumeric character"
+
+// LabelValueMaxLength is a label's max length
 const LabelValueMaxLength int = 63
 
 var labelValueRegexp = regexp.MustCompile("^" + labelValueFmt + "$")
@@ -89,6 +109,8 @@ func IsValidLabelValue(value string) []string {
 
 const dns1123LabelFmt string = "[a-z0-9]([-a-z0-9]*[a-z0-9])?"
 const dns1123LabelErrMsg string = "a DNS-1123 label must consist of lower case alphanumeric characters or '-', and must start and end with an alphanumeric character"
+
+// DNS1123LabelMaxLength is a label's max length in DNS (RFC 1123)
 const DNS1123LabelMaxLength int = 63
 
 var dns1123LabelRegexp = regexp.MustCompile("^" + dns1123LabelFmt + "$")
@@ -108,6 +130,8 @@ func IsDNS1123Label(value string) []string {
 
 const dns1123SubdomainFmt string = dns1123LabelFmt + "(\\." + dns1123LabelFmt + ")*"
 const dns1123SubdomainErrorMsg string = "a DNS-1123 subdomain must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character"
+
+// DNS1123SubdomainMaxLength is a subdomain's max length in DNS (RFC 1123)
 const DNS1123SubdomainMaxLength int = 253
 
 var dns1123SubdomainRegexp = regexp.MustCompile("^" + dns1123SubdomainFmt + "$")
@@ -127,6 +151,8 @@ func IsDNS1123Subdomain(value string) []string {
 
 const dns1035LabelFmt string = "[a-z]([-a-z0-9]*[a-z0-9])?"
 const dns1035LabelErrMsg string = "a DNS-1035 label must consist of lower case alphanumeric characters or '-', start with an alphabetic character, and end with an alphanumeric character"
+
+// DNS1035LabelMaxLength is a label's max length in DNS (RFC 1035)
 const DNS1035LabelMaxLength int = 63
 
 var dns1035LabelRegexp = regexp.MustCompile("^" + dns1035LabelFmt + "$")
@@ -186,6 +212,14 @@ func IsValidPortNum(port int) []string {
 		return nil
 	}
 	return []string{InclusiveRangeError(1, 65535)}
+}
+
+// IsInRange tests that the argument is in an inclusive range.
+func IsInRange(value int, min int, max int) []string {
+	if value >= min && value <= max {
+		return nil
+	}
+	return []string{InclusiveRangeError(min, max)}
 }
 
 // Now in libcontainer UID/GID limits is 0 ~ 1<<31 - 1
@@ -256,6 +290,7 @@ const percentErrMsg string = "a valid percent string must be a numeric string fo
 
 var percentRegexp = regexp.MustCompile("^" + percentFmt + "$")
 
+// IsValidPercent checks that string is in the form of a percentage
 func IsValidPercent(percent string) []string {
 	if !percentRegexp.MatchString(percent) {
 		return []string{RegexError(percentErrMsg, percentFmt, "1%", "93%")}
@@ -362,5 +397,20 @@ func hasChDirPrefix(value string) []string {
 	case strings.HasPrefix(value, ".."):
 		errs = append(errs, `must not start with '..'`)
 	}
+	return errs
+}
+
+// IsValidSocketAddr checks that string represents a valid socket address
+// as defined in RFC 789. (e.g 0.0.0.0:10254 or [::]:10254))
+func IsValidSocketAddr(value string) []string {
+	var errs []string
+	ip, port, err := net.SplitHostPort(value)
+	if err != nil {
+		errs = append(errs, "must be a valid socket address format, (e.g. 0.0.0.0:10254 or [::]:10254)")
+		return errs
+	}
+	portInt, _ := strconv.Atoi(port)
+	errs = append(errs, IsValidPortNum(portInt)...)
+	errs = append(errs, IsValidIP(ip)...)
 	return errs
 }

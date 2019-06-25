@@ -1,6 +1,9 @@
 FROM BASEIMAGE
 
 COPY metrics-server /
-COPY ca-certificates.crt /etc/ssl/certs/
+
+RUN adduser -D metrics-server
+
+USER metrics-server
 
 ENTRYPOINT ["/metrics-server"]

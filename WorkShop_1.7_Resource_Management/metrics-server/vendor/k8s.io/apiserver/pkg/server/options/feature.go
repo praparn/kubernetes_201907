@@ -26,7 +26,6 @@ import (
 type FeatureOptions struct {
 	EnableProfiling           bool
 	EnableContentionProfiling bool
-	EnableSwaggerUI           bool
 }
 
 func NewFeatureOptions() *FeatureOptions {
@@ -35,28 +34,39 @@ func NewFeatureOptions() *FeatureOptions {
 	return &FeatureOptions{
 		EnableProfiling:           defaults.EnableProfiling,
 		EnableContentionProfiling: defaults.EnableContentionProfiling,
-		EnableSwaggerUI:           defaults.EnableSwaggerUI,
 	}
 }
 
 func (o *FeatureOptions) AddFlags(fs *pflag.FlagSet) {
+	if o == nil {
+		return
+	}
+
 	fs.BoolVar(&o.EnableProfiling, "profiling", o.EnableProfiling,
 		"Enable profiling via web interface host:port/debug/pprof/")
 	fs.BoolVar(&o.EnableContentionProfiling, "contention-profiling", o.EnableContentionProfiling,
 		"Enable lock contention profiling, if profiling is enabled")
-	fs.BoolVar(&o.EnableSwaggerUI, "enable-swagger-ui", o.EnableSwaggerUI,
-		"Enables swagger ui on the apiserver at /swagger-ui")
+	dummy := false
+	fs.BoolVar(&dummy, "enable-swagger-ui", dummy, "Enables swagger ui on the apiserver at /swagger-ui")
+	fs.MarkDeprecated("enable-swagger-ui", "swagger 1.2 support has been removed")
 }
 
 func (o *FeatureOptions) ApplyTo(c *server.Config) error {
+	if o == nil {
+		return nil
+	}
+
 	c.EnableProfiling = o.EnableProfiling
 	c.EnableContentionProfiling = o.EnableContentionProfiling
-	c.EnableSwaggerUI = o.EnableSwaggerUI
 
 	return nil
 }
 
 func (o *FeatureOptions) Validate() []error {
+	if o == nil {
+		return nil
+	}
+
 	errs := []error{}
 	return errs
 }

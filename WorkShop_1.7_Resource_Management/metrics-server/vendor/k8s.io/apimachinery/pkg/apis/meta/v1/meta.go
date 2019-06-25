@@ -63,6 +63,8 @@ type Object interface {
 	SetOwnerReferences([]OwnerReference)
 	GetClusterName() string
 	SetClusterName(clusterName string)
+	GetManagedFields() []ManagedFieldsEntry
+	SetManagedFields(managedFields []ManagedFieldsEntry)
 }
 
 // ListMetaAccessor retrieves the list interface from an object
@@ -90,6 +92,8 @@ type ListInterface interface {
 	SetResourceVersion(version string)
 	GetSelfLink() string
 	SetSelfLink(selfLink string)
+	GetContinue() string
+	SetContinue(c string)
 }
 
 // Type exposes the type and APIVersion of versioned or internal API objects.
@@ -105,6 +109,8 @@ func (meta *ListMeta) GetResourceVersion() string        { return meta.ResourceV
 func (meta *ListMeta) SetResourceVersion(version string) { meta.ResourceVersion = version }
 func (meta *ListMeta) GetSelfLink() string               { return meta.SelfLink }
 func (meta *ListMeta) SetSelfLink(selfLink string)       { meta.SelfLink = selfLink }
+func (meta *ListMeta) GetContinue() string               { return meta.Continue }
+func (meta *ListMeta) SetContinue(c string)              { meta.Continue = c }
 
 func (obj *TypeMeta) GetObjectKind() schema.ObjectKind { return obj }
 
@@ -158,55 +164,13 @@ func (meta *ObjectMeta) GetInitializers() *Initializers               { return m
 func (meta *ObjectMeta) SetInitializers(initializers *Initializers)   { meta.Initializers = initializers }
 func (meta *ObjectMeta) GetFinalizers() []string                      { return meta.Finalizers }
 func (meta *ObjectMeta) SetFinalizers(finalizers []string)            { meta.Finalizers = finalizers }
-
-func (meta *ObjectMeta) GetOwnerReferences() []OwnerReference {
-	if meta.OwnerReferences == nil {
-		return nil
-	}
-	ret := make([]OwnerReference, len(meta.OwnerReferences))
-	for i := 0; i < len(meta.OwnerReferences); i++ {
-		ret[i].Kind = meta.OwnerReferences[i].Kind
-		ret[i].Name = meta.OwnerReferences[i].Name
-		ret[i].UID = meta.OwnerReferences[i].UID
-		ret[i].APIVersion = meta.OwnerReferences[i].APIVersion
-		if meta.OwnerReferences[i].Controller != nil {
-			value := *meta.OwnerReferences[i].Controller
-			ret[i].Controller = &value
-		}
-		if meta.OwnerReferences[i].BlockOwnerDeletion != nil {
-			value := *meta.OwnerReferences[i].BlockOwnerDeletion
-			ret[i].BlockOwnerDeletion = &value
-		}
-	}
-	return ret
-}
-
+func (meta *ObjectMeta) GetOwnerReferences() []OwnerReference         { return meta.OwnerReferences }
 func (meta *ObjectMeta) SetOwnerReferences(references []OwnerReference) {
-	if references == nil {
-		meta.OwnerReferences = nil
-		return
-	}
-	newReferences := make([]OwnerReference, len(references))
-	for i := 0; i < len(references); i++ {
-		newReferences[i].Kind = references[i].Kind
-		newReferences[i].Name = references[i].Name
-		newReferences[i].UID = references[i].UID
-		newReferences[i].APIVersion = references[i].APIVersion
-		if references[i].Controller != nil {
-			value := *references[i].Controller
-			newReferences[i].Controller = &value
-		}
-		if references[i].BlockOwnerDeletion != nil {
-			value := *references[i].BlockOwnerDeletion
-			newReferences[i].BlockOwnerDeletion = &value
-		}
-	}
-	meta.OwnerReferences = newReferences
+	meta.OwnerReferences = references
 }
-
-func (meta *ObjectMeta) GetClusterName() string {
-	return meta.ClusterName
-}
-func (meta *ObjectMeta) SetClusterName(clusterName string) {
-	meta.ClusterName = clusterName
+func (meta *ObjectMeta) GetClusterName() string                 { return meta.ClusterName }
+func (meta *ObjectMeta) SetClusterName(clusterName string)      { meta.ClusterName = clusterName }
+func (meta *ObjectMeta) GetManagedFields() []ManagedFieldsEntry { return meta.ManagedFields }
+func (meta *ObjectMeta) SetManagedFields(managedFields []ManagedFieldsEntry) {
+	meta.ManagedFields = managedFields
 }

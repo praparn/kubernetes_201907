@@ -98,7 +98,7 @@ This workshop will use http get request some command on container for probe
 	kubectl describe pods/<pods name>
 
 6. Edit file webtest_deploy_liveness_readiness_port.yml to change httpHeaders path from /init to /
-(In case of cloude: sudo vi webtest_deploy_liveness_readiness_http.yml )
+(In case of cloud:  vi webtest_deploy_liveness_readiness_http.yml )
 
 7. Apply new configuration by command:
 	kubectl apply -f webtest_deploy_liveness_readiness_http.yml 
