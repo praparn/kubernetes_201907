@@ -3,7 +3,7 @@ Instructor for Monitor Kubernetes Farm with Prometheus and Grafana:
 Part1: Install Metric Server
 ====================================================
 1. (Master) Create Metric Server:
-	cd ~/kubernetes_201904/WorkShop_2.8_HPA_WorkShop/metrics-server/
+	cd ~/kubernetes_201907/WorkShop_2.8_HPA_WorkShop/metrics-server/
 	kubectl create -f deploy/1.8+/
 	kubectl get pods --all-namespaces
 	kubectl logs pods/<metrics's pods name> -n=kube-system
@@ -111,4 +111,4 @@ Part5: Test generate load
 
 4. (Master) CleanUp Lab
 	kubectl delete deployment/load-generator
-	kubectl delete -f webtest_deploy_hpa.yml (In case github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201904/master/WorkShop_2.8_HPA_WorkShop/webtest_deploy_hpa.yml)
+	kubectl delete -f webtest_deploy_hpa.yml (In case github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.8_HPA_WorkShop/webtest_deploy_hpa.yml)
