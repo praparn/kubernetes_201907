@@ -86,7 +86,6 @@ This workshop will use http get request some command on container for probe
 	kubectl describe pods/<pods name>
 
 2. Test access browser/curl: http://<Public IP>:32500
-	*Check HTTP Header by curl (curl -I http://<Public IP>:32500)
 
 3. Edit file webtest_deploy_liveness_readiness_http.yml to change httpHeaders path from / to /init
 (In case of cloude: vi webtest_deploy_liveness_readiness_http.yml )
