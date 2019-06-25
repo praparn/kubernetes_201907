@@ -8,7 +8,8 @@ This workshop will create web Pods and simple map to outside
 docker image pull labdocker/cluster:webservicelite
 docker image pull labdocker/mariadb:latest
 docker image pull labdocker/redis:latest
-docker image pull labdocker/cluster:webservice
+docker image pull labdocker/cluster:webservicev2
+docker image pull labdocker/cluster:webservicev2set2
 docker image pull labdocker/cluster:webcache_kubernetes
 docker image pull labdocker/cadvisor:latest
 
