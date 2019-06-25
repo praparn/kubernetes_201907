@@ -9,7 +9,7 @@ Part1: Container level configuration:
 2. Check File on WorkShop
 
 3. Create Namespace by command:
-	kubectl create namespace webmicroservice
+	kubectl create -f webmicroservice_namespace.yml  (In case run via github: kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.1_ConfigMap_Secret/webmicroservice_namespace.yml)
 
 4. Create ConfigMap by command:
 	kubectl create -f webmodule_configmap.yml   --namespace webmicroservice	(In case run via github: kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.1_ConfigMap_Secret/webmodule_configmap.yml   --namespace webmicroservice)
@@ -70,4 +70,4 @@ Part1: Container level configuration:
 14. Cleanup lab by command:
 	kubectl delete -f webmodule_deploy_config.yml --namespace=webmicroservice	(In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.1_ConfigMap_Secret/webmodule_deploy_config.yml --namespace webmicroservice)
 	kubectl delete -f databasemodule_deploy_config.yml --namespace=webmicroservice	(In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.1_ConfigMap_Secret/databasemodule_deploy_config.yml --namespace webmicroservice)
-	kubectl delete namespace/webmicroservice
+	kubectl delete -f webmicroservice_namespace.yml  (In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.1_ConfigMap_Secret/webmicroservice_namespace.yml)
