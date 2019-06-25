@@ -28,7 +28,7 @@ Part1: Container level configuration:
 	kubectl get pods -n webmicroservice
 
 7. Check Detail of Pods by command:
-	kubectl describe pods/<pods name>  --namespace webmicroservice
+	kubectl describe pods/<pods name>  -n webmicroservice
 
 8. Create WebModbule Deployment by command:
 	kubectl create -f webmodule_deploy_config.yml (In case run via github: kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.1_ConfigMap_Secret/webmodule_deploy_config.yml)
@@ -68,6 +68,6 @@ Part1: Container level configuration:
 	curl http://$Server_IP:$Server_Port/users/removeuser/4
 
 14. Cleanup lab by command:
-	kubectl delete -f webmodule_deploy_config.yml --namespace=webmicroservice	(In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.1_ConfigMap_Secret/webmodule_deploy_config.yml --namespace webmicroservice)
-	kubectl delete -f databasemodule_deploy_config.yml --namespace=webmicroservice	(In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.1_ConfigMap_Secret/databasemodule_deploy_config.yml --namespace webmicroservice)
+	kubectl delete -f webmodule_deploy_config.yml (In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.1_ConfigMap_Secret/webmodule_deploy_config.yml)
+	kubectl delete -f databasemodule_deploy_config.yml (In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.1_ConfigMap_Secret/databasemodule_deploy_config.yml)
 	kubectl delete -f webmicroservice_namespace.yml  (In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.1_ConfigMap_Secret/webmicroservice_namespace.yml)
