@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: web
+  namespace: webmicroservice
   labels:
     name: "web"
     owner: "Praparn_L"
@@ -32,6 +33,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web
+  namespace: webmicroservice
   labels:
     name: "web"
     owner: "Praparn_L"
