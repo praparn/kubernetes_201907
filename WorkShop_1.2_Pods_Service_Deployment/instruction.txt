@@ -127,3 +127,13 @@ This workshop will create Pods with multiple container
 		kubectl delete -f webmodule_svc.yml	(In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_1.2_Pods_Service_Deployment/multicontainer/webmodule_svc.yml)
 		kubectl delete -f databasemodule_pod.yml	(In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_1.2_Pods_Service_Deployment/multicontainer/databasemodule_pod.yml)
 		kubectl delete -f databasemodule_svc.yml	(In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_1.2_Pods_Service_Deployment/multicontainer/databasemodule_svc.yml)
+
+
+====================================================
+Part 3: Check API Version, Kubernetes Component
+This workshop will show how to use help and explain structure of component in kubernetes
+====================================================
+
+1. Check all available component in exiting kubernetes farm via command: kubectl api-resources -o wide
+
+2. Check detail of parameter/version/etc relate to "pods" via command: kubectl explain pods, kubectl explain svc
