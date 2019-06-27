@@ -3,7 +3,8 @@ Note: This instruction will start lab for kubernetes's cluster for real workshop
 
 0. Reinitial your machine before grouping with your friend by command:
 	sudo su -
-    kubeadm reset           ==> Answer 'y'
+    kubeadm reset           ==> Answer 'y' 2 times
+	sudo rm -rf /var/lib/etcd
     docker system prune -af
 	reboot
 	
@@ -61,12 +62,12 @@ tmux new -s Lab
 
 6. (Master) Setup run cluster system by command (Regular User):
 	mkdir -p $HOME/.kube
-  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config	==> Answer: "Y"
+  	sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config	==> Answer: "Y"
 	sudo chown $(id -u):$(id -g) $HOME/.kube/config
 	kubectl taint nodes --all node-role.kubernetes.io/master-
 
 7. (local) SCP Certificate from AWS to Local: (*Optional: For who install kubectl on local machine: (Ref: https://kubernetes.io/docs/tasks/tools/install-kubectl/))
-    scp -i docker_lab ubuntu@<Public IP (Master):/home/ubuntu/.kube/config adminconfig.conf
+    scp -i docker_lab ubuntu@<Public IP (Master)>:/home/ubuntu/.kube/config adminconfig.conf
 	*Remark: Windows use WINSCP*
 
 8. (Master) Create calico net plugin for network for cluster by command:
