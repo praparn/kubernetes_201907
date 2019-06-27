@@ -20,7 +20,7 @@ import (
 	"testing"
 
 	api "k8s.io/api/core/v1"
-	extensions "k8s.io/api/extensions/v1beta1"
+	networking "k8s.io/api/networking/v1beta1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 
@@ -29,28 +29,28 @@ import (
 	"k8s.io/ingress-nginx/internal/ingress/resolver"
 )
 
-func buildIngress() *extensions.Ingress {
-	defaultBackend := extensions.IngressBackend{
+func buildIngress() *networking.Ingress {
+	defaultBackend := networking.IngressBackend{
 		ServiceName: "default-backend",
 		ServicePort: intstr.FromInt(80),
 	}
 
-	return &extensions.Ingress{
+	return &networking.Ingress{
 		ObjectMeta: meta_v1.ObjectMeta{
 			Name:      "foo",
 			Namespace: api.NamespaceDefault,
 		},
-		Spec: extensions.IngressSpec{
-			Backend: &extensions.IngressBackend{
+		Spec: networking.IngressSpec{
+			Backend: &networking.IngressBackend{
 				ServiceName: "default-backend",
 				ServicePort: intstr.FromInt(80),
 			},
-			Rules: []extensions.IngressRule{
+			Rules: []networking.IngressRule{
 				{
 					Host: "foo.bar.com",
-					IngressRuleValue: extensions.IngressRuleValue{
-						HTTP: &extensions.HTTPIngressRuleValue{
-							Paths: []extensions.HTTPIngressPath{
+					IngressRuleValue: networking.IngressRuleValue{
+						HTTP: &networking.HTTPIngressRuleValue{
+							Paths: []networking.HTTPIngressPath{
 								{
 									Path:    "/foo",
 									Backend: defaultBackend,
@@ -70,16 +70,17 @@ type mockBackend struct {
 
 func (m mockBackend) GetDefaultBackend() defaults.Backend {
 	return defaults.Backend{
-		ProxyConnectTimeout:    10,
-		ProxySendTimeout:       15,
-		ProxyReadTimeout:       20,
-		ProxyBuffersNumber:     4,
-		ProxyBufferSize:        "10k",
-		ProxyBodySize:          "3k",
-		ProxyNextUpstream:      "error",
-		ProxyNextUpstreamTries: 3,
-		ProxyRequestBuffering:  "on",
-		ProxyBuffering:         "off",
+		ProxyConnectTimeout:      10,
+		ProxySendTimeout:         15,
+		ProxyReadTimeout:         20,
+		ProxyBuffersNumber:       4,
+		ProxyBufferSize:          "10k",
+		ProxyBodySize:            "3k",
+		ProxyNextUpstream:        "error",
+		ProxyNextUpstreamTimeout: 0,
+		ProxyNextUpstreamTries:   3,
+		ProxyRequestBuffering:    "on",
+		ProxyBuffering:           "off",
 	}
 }
 
@@ -94,6 +95,7 @@ func TestProxy(t *testing.T) {
 	data[parser.GetAnnotationWithPrefix("proxy-buffer-size")] = "1k"
 	data[parser.GetAnnotationWithPrefix("proxy-body-size")] = "2k"
 	data[parser.GetAnnotationWithPrefix("proxy-next-upstream")] = "off"
+	data[parser.GetAnnotationWithPrefix("proxy-next-upstream-timeout")] = "5"
 	data[parser.GetAnnotationWithPrefix("proxy-next-upstream-tries")] = "3"
 	data[parser.GetAnnotationWithPrefix("proxy-request-buffering")] = "off"
 	data[parser.GetAnnotationWithPrefix("proxy-buffering")] = "on"
@@ -127,6 +129,9 @@ func TestProxy(t *testing.T) {
 	}
 	if p.NextUpstream != "off" {
 		t.Errorf("expected off as next-upstream but returned %v", p.NextUpstream)
+	}
+	if p.NextUpstreamTimeout != 5 {
+		t.Errorf("expected 5 as next-upstream-timeout but returned %v", p.NextUpstreamTimeout)
 	}
 	if p.NextUpstreamTries != 3 {
 		t.Errorf("expected 3 as next-upstream-tries but returned %v", p.NextUpstreamTries)
@@ -173,6 +178,9 @@ func TestProxyWithNoAnnotation(t *testing.T) {
 	}
 	if p.NextUpstream != "error" {
 		t.Errorf("expected error as next-upstream but returned %v", p.NextUpstream)
+	}
+	if p.NextUpstreamTimeout != 0 {
+		t.Errorf("expected 0 as next-upstream-timeout but returned %v", p.NextUpstreamTimeout)
 	}
 	if p.NextUpstreamTries != 3 {
 		t.Errorf("expected 3 as next-upstream-tries but returned %v", p.NextUpstreamTries)

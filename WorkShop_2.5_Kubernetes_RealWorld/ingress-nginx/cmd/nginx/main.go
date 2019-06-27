@@ -54,8 +54,6 @@ const (
 	// High enough Burst to fit all expected use cases. Burst=0 is not set here, because
 	// client code is overriding it.
 	defaultBurst = 1e6
-
-	fakeCertificate = "default-fake-certificate"
 )
 
 func main() {
@@ -109,15 +107,13 @@ func main() {
 		}
 	}
 
-	// create the default SSL certificate (dummy)
-	defCert, defKey := ssl.GetFakeSSLCert()
-	c, err := ssl.AddOrUpdateCertAndKey(fakeCertificate, defCert, defKey, []byte{}, fs)
-	if err != nil {
-		klog.Fatalf("Error generating self-signed certificate: %v", err)
-	}
+	conf.FakeCertificate = ssl.GetFakeSSLCert(fs)
+	klog.Infof("Created fake certificate with PemFileName: %v", conf.FakeCertificate.PemFileName)
 
-	conf.FakeCertificatePath = c.PemFileName
-	conf.FakeCertificateSHA = c.PemSHA
+	k8s.IsNetworkingIngressAvailable = k8s.NetworkingIngressAvailable(kubeClient)
+	if !k8s.IsNetworkingIngressAvailable {
+		klog.Warningf("Using deprecated \"k8s.io/api/extensions/v1beta1\" package because Kubernetes version is < v1.14.0")
+	}
 
 	conf.Client = kubeClient
 
@@ -262,13 +258,6 @@ func registerHandlers(mux *http.ServeMux) {
 		w.WriteHeader(http.StatusOK)
 		b, _ := json.Marshal(version.String())
 		w.Write(b)
-	})
-
-	mux.HandleFunc("/stop", func(w http.ResponseWriter, r *http.Request) {
-		err := syscall.Kill(syscall.Getpid(), syscall.SIGTERM)
-		if err != nil {
-			klog.Errorf("Unexpected error: %v", err)
-		}
 	})
 }
 
