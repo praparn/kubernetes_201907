@@ -192,8 +192,8 @@ metadata:
 ========================================
 
 	21.3 Apply service and configuration as below:
-	kubectl apply -f ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/provider/aws/service-l4.yaml
-	kubectl apply -f ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/provider/aws/patch-configmap-l4.yaml
+	kubectl apply -f ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/static/provider/aws/service-l4.yaml
+	kubectl apply -f ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/static/provider/aws/patch-configmap-l4.yaml
 
 	21.4 Check by command: 
 	watch kubectl get pods -n=ingress-nginx

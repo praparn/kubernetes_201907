@@ -18,7 +18,7 @@ cd ~/
 ls kubernetes_201907
 
 3. (Master) Add Label by command:
-kubectl get nodes:
+kubectl get nodes
 ====================================================
 Example Output:
 kubuntu@ip-10-0-1-17:~$ kubectl get nodes
