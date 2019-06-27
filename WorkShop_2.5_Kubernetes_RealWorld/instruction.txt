@@ -145,9 +145,9 @@ kubectl delete svc/webtest
 
 21. (Master) Create ingress set:
 	21.1. Create mandatory resource by command: 
-	kubectl apply -f ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/mandatory.yaml
+	kubectl apply -f ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/static/mandatory.yaml
 	*Remark: If you need to modified config. Edit this file first
-	vi ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/mandatory.yaml
+	vi ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/static/mandatory.yaml
 ========================================
 Example:
 [...]
@@ -159,13 +159,14 @@ metadata:
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-data:													
-  client-max-body-size: "50m" 
+data:
+  use-http2: "true"
+  proxy-body-size: "50m"
 [...]
 ========================================
 
 	21.2 Check file service:
-	more ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/provider/aws/service-l4.yaml
+	more ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/static/provider/aws/service-l4.yaml
 ========================================
 Example:
 [...]
