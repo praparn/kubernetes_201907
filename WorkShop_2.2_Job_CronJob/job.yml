@@ -10,6 +10,7 @@ metadata:
     environment: development
 spec:
   ttlSecondsAfterFinished: 30
+  activeDeadlineSeconds: 60
   template:
     metadata:
       name: linenotify
