@@ -105,7 +105,6 @@ This workshop will use http get request some command on container for probe
 
 8. Check status of pods by command (3 -5 min):
 	kubectl get pods --show-labels
-	kubectl describe pods/<pods name>
 
 9. Cleanup Lab by command:
 	kubectl delete -f webtest_deploy_liveness_readiness_http.yml

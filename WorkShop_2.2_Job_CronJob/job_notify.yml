@@ -9,6 +9,7 @@ metadata:
     module: Job
     environment: development
 spec:
+  ttlSecondsAfterFinished: 30
   template:
     metadata:
       name: linenotify
