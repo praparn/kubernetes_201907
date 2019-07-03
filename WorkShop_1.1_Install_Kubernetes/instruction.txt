@@ -45,4 +45,5 @@ Link for download:
 *Remark: In case you need to reinitial all this lab again please kindly following command below (*Warnning: This will reset all lab that you had been operate before)
     sudo su -
     kubeadm reset           ==> Answer 'y'
+    sudo rm -rf /var/lib/etcd
     docker system prune -af  ==> Answer 'y'
