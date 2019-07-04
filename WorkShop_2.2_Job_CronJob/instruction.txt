@@ -36,10 +36,8 @@ Create Job for Monitor System via LINE:
 
   ****After Complete Pods will gone. We can view all complete by command***
   kubectl get pods -o wide
-
 5. Check Detail of Job by command:
 	kubectl describe jobs/linenotify
-
 
 6. Monitor Result on LINE Application:
 
