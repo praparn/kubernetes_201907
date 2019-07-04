@@ -45,6 +45,7 @@ Part 1: HPA Configuration:
 	kubectl get hpa
 	kubectl top pods
 	kubectl top nodes
+	kubectl describe hpa/webtest
 
 10. Cleanup lab by command:
 	kubectl delete hpa/webtest

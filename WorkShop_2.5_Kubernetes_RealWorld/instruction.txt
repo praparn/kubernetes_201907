@@ -85,7 +85,7 @@ tmux new -s Lab
 	http://<Public IP of Master>:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
 
 12. (local) Edit file "adminconfig and test access kubectl for access and command cluster: (*Optional: For who install kubectl on local machine)
-	vi ./adminconfig			==> Edit IP Address to Public IP Address
+	vi ./adminconfig.conf			==> Edit IP Address to Public IP Address
 	kubectl --kubeconfig ./adminconfig.conf get nodes
 	kubectl --kubeconfig ./adminconfig.conf get svc
 
