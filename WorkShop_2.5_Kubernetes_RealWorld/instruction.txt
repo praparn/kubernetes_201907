@@ -125,26 +125,26 @@ watch kubectl get nodes
 20. (Master)Check Pods from all cluster system running by command:
 watch kubectl get pods --all-namespaces
 
-18. (Master) Test deployment basic nginx pods by command
+21. (Master) Test deployment basic nginx pods by command
 kubectl run webtest --image=labdocker/nginx:http2 --port=443
 kubectl get pods -o wide
 kubectl expose deployment webtest --target-port=443 --type=NodePort
 kubectl get svc -o wide                                               ==> Record Public Port
 
-19. (loal) Test get web outside:
+22. (loal) Test get web outside:
 https://x.x.x.x:xxxx
 https://x.x.x.x:xxxx
 https://x.x.x.x:xxxx
 
-20. (Master) Cleanup Lab by command:
+23. (Master) Cleanup Lab by command:
 kubectl delete deployment/webtest
 kubectl delete svc/webtest
 
 
 ====================================== Create Ingress Controller====================================================
 
-21. (Master) Create ingress set:
-	21.1. Create mandatory resource by command: 
+24. (Master) Create ingress set:
+	24.1. Create mandatory resource by command: 
 	kubectl apply -f ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/static/mandatory.yaml
 	*Remark: If you need to modified config. Edit this file first
 	vi ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/static/mandatory.yaml
@@ -165,7 +165,7 @@ data:
 [...]
 ========================================
 
-	21.2 Check file service:
+	24.2 Check file service:
 	more ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/static/provider/aws/service-l4.yaml
 ========================================
 Example:
@@ -191,14 +191,14 @@ metadata:
 [...]
 ========================================
 
-	21.3 Apply service and configuration as below:
+	24.3 Apply service and configuration as below:
 	kubectl apply -f ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/static/provider/aws/service-l4.yaml
 	kubectl apply -f ~/kubernetes_201907/WorkShop_2.5_Kubernetes_RealWorld/ingress-nginx/deploy/static/provider/aws/patch-configmap-l4.yaml
 
-	21.4 Check by command: 
+	24.4 Check by command: 
 	watch kubectl get pods -n=ingress-nginx
 
-	21.5 Collect external cname by command:
+	24.5 Collect external cname by command:
 	kubectl get svc -n=ingress-nginx	(This may take several miniute before finished) ==> Record "CNAME of ELB"
 ========================================
 Example:
@@ -206,7 +206,7 @@ NAME            TYPE           CLUSTER-IP       EXTERNAL-IP                     
 ingress-nginx   LoadBalancer   10.108.187.142   af4e0d29c410111e9a11002f20ffeb23-988151595.ap-southeast-1.elb.amazonaws.com   80:31252/TCP,443:31461/TCP   17s
 ========================================
 
-22. (Master) Test deploy ingress service
+25. (Master) Test deploy ingress service
 
 # Create Service/Pods/Deployment for webtest1 and webtest2 by command:
 	kubectl create -f webtest_deploy.yml 	(In case run via github: kubectl create -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.4_Ingress_Network/webtest_deploy.yml )
@@ -220,14 +220,14 @@ ingress-nginx   LoadBalancer   10.108.187.142   af4e0d29c410111e9a11002f20ffeb23
 	kubectl get ing -o wide
 	kubectl describe ing/ingresswebtest
 
-23. (local) Test access website by command or browser:
+26. (local) Test access website by command or browser:
 	curl http://<CNAME AWS's ELB> -H 'Host:webtest1.kuberneteslabthailand.com'
 	curl http://<CNAME AWS's ELB> -H 'Host:webtest2.kuberneteslabthailand.com'
 
-24. (Master) Delete Existing Ingress by command:
+27. (Master) Delete Existing Ingress by command:
 	kubectl delete -f ingress_webtest.yml	(In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.4_Ingress_Network/ingress_webtest.yml)
 	
-25. (Master) Clean Up Lab:
+28. (Master) Clean Up Lab:
 	kubectl delete -f webtest_deploy.yml	(In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.4_Ingress_Network/webtest_deploy.yml)
 	kubectl delete -f webtest_deploy2.yml	(In case run via github: kubectl delete -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_2.4_Ingress_Network/webtest_deploy2.yml)
 
