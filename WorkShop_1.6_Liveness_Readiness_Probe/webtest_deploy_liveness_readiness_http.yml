@@ -53,7 +53,7 @@ spec:
               path: /
               port: webservice
             initialDelaySeconds: 15
-            periodSeconds: 10
-            timeoutSeconds: 15
+            periodSeconds: 30
+            timeoutSeconds: 30
             successThreshold: 1
-            failureThreshold: 3
+            failureThreshold: 10
