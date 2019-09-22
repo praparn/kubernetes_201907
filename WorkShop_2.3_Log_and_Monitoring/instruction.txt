@@ -36,6 +36,8 @@ Part1: Container Logging:
 	kubectl logs pods/<pods name> -c cachedb
 
 10. Open kubenetes dashboard by command:
+	kubectl apply -f https://raw.githubusercontent.com/praparn/kubernetes_201907/master/WorkShop_1.7_Resource_Management/dashboard.yml
+	watch kubectl get pods --all-namespaces
 	kubectl proxy --address='<Private IP>' --accept-hosts='^*$'
 
 	*Test by open browser: http://<Public IP>:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
